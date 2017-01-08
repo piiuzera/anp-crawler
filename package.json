@@ -1,0 +1,21 @@
+{
+  "name": "testengineer",
+  "version": "1.0.0",
+  "description": "Test Engineer",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matheus Amaro",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^0.22.0",
+    "ejs": "^2.5.5",
+    "express": "^4.14.0",
+    "jsonfile": "^2.4.0",
+    "mongodb": "^2.2.19",
+    "node-tesseract": "^0.2.7",
+    "request": "^2.79.0",
+    "request-promise": "^4.1.1"
+  }
+}

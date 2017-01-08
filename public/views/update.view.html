@@ -1,0 +1,27 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-6 text-right">
+			<h1 class="text-center">Atualizar todos os dados do sistema</h1>
+			<h4 class="text-center">Este procedimento demora alguns minutos...</h1>
+
+			<button class="btn btn-primary" data-loading-text="Solicitando Atualização..." autocomplete="off" ng-click="updateData()">
+				Atualizar Dados
+			</button>
+
+			<div class="text-center">
+				<p class="text-primary" ng-show="success">{{success}}</p>
+				<p class="text-danger" ng-show="error">{{error}}</p>
+			</div>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function() {
+		$('button').click(function() {
+			$(this).button('loading');
+		});
+	});
+</script>

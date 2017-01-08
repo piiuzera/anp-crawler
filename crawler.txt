@@ -1,0 +1,79 @@
+
+#### CRAWLER ANP ####
+
+### 1° STEP
+### Get the values in the first request
+URL: http://www.anp.gov.br/preco/prc/Resumo_Por_Estado_Index.asp,
+METHOD: GET,
+RESPONSE:
+	selSemana 		-> input[name='selSemana'],
+	desc_Semana 	-> input[name='desc_Semana'],
+	cod_Semana 		-> input[name='cod_Semana'],
+	tipo 			-> input[name='tipo'],
+	Cod_Combustivel -> input[name='Cod_Combustivel'],
+	ALL_STATES      -> select[name='selEstado'] > option,
+	ALL_FUEL		-> #selCombustivel > option
+
+### 2° STEP
+### First post request to keep the data stored in the cookie
+URL: http://www.anp.gov.br/preco/prc/Resumo_Por_Estado_Index.asp
+METHOD: POST,
+JAR: true,
+FORM:
+	selSemana 		-> var selSemana informed above,
+	desc_Semana 	-> var desc_Semana informed above,
+	cod_Semana 		-> var cod_Semana informed above,
+	tipo 			-> var tipo informed above,
+	Cod_Combustivel -> var Cod_Combustivel informed above,
+	selEstado 		-> var each state in ALL_STATES informed above,
+	selCombustivel	-> var each FUEL in ALL_FUEL informed above,
+	txtValor		-> empty field,
+	image1			-> empty field,
+RESPONSE:
+	Will keep the session on the cookie for navigation elsewhere.
+
+### 3° STEP
+### The request will be made by the size of the ALL_FUEL for each state, as it is responsible for storing the data of each city and each fuel
+URL: http://www.anp.gov.br/preco/prc/Resumo_Por_Estado_Municipio.asp,
+METHOD: GET,
+JAR: true,
+RESPONSE:
+	ALL_CITIES 				-> table[class=\'table_padrao scrollable_table\'] > tr > td[0],
+	type 					-> var each FUEL in ALL_FUEL informed above,
+	consumerPrice ->
+		averagePrice 		-> table[class=\'table_padrao scrollable_table\'] > tr > td[2],
+		standardDeviation 	-> table[class=\'table_padrao scrollable_table\'] > tr > td[3],
+		minPrice 			-> table[class=\'table_padrao scrollable_table\'] > tr > td[4],
+		maxPrice 			-> table[class=\'table_padrao scrollable_table\'] > tr > td[5],
+		averageMargin 		-> table[class=\'table_padrao scrollable_table\'] > tr > td[6],
+	distributionPrice -> 
+		averagePrice 		-> table[class=\'table_padrao scrollable_table\'] > tr > td[7],
+		standardDeviation 	-> table[class=\'table_padrao scrollable_table\'] > tr > td[8],
+		minPrice 			-> table[class=\'table_padrao scrollable_table\'] > tr > td[9],
+		maxPrice 			-> table[class=\'table_padrao scrollable_table\'] > tr > td[10]
+
+### 4° STEP
+### This request searches all the filling stations
+URL: http://www.anp.gov.br/preco/prc/Resumo_Semanal_Posto.asp,
+METHOD: POST,
+JAR: true,
+FORM:
+	cod_semana 			-> var cod_Semana informed above,
+	desc_semana 		-> var desc_Semana informed above,
+	cod_combustivel 	-> var Cod_Combustivel informed above,
+	desc_combustivel	-> empty field,
+	selMunicipio		-> var each city in ALL_CITIES informed above,
+	tipo				-> var tipo informed above,
+RESPONSE:
+	stations ->
+		name 	-> table[class='table_padrao scrollable_table'] > tr > td[0],
+		address -> table[class='table_padrao scrollable_table'] > tr > td[1],
+		area 	-> table[class='table_padrao scrollable_table'] > tr > td[2],
+		flag	-> table[class='table_padrao scrollable_table'] > tr > td[3],
+		price ->
+			type -> var each FUEL in ALL_FUEL informed above,
+			sellPrice	-> table[class='table_padrao scrollable_table'] > tr > td[4],
+			buyPrice	-> table[class='table_padrao scrollable_table'] > tr > td[5],
+			saleMode	-> table[class='table_padrao scrollable_table'] > tr > td[6],
+			provider	-> table[class='table_padrao scrollable_table'] > tr > td[7],
+			date		-> table[class='table_padrao scrollable_table'] > tr > td[8],
