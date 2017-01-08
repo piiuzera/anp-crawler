@@ -330,7 +330,8 @@ function stations() {
 }
 
 function saveMongoDb(callback) {
-	mongoClient.connect('mongodb://localhost:27017/anp', function(err, db) {
+	var env = jsonfile.readFileSync('./mongo.json');
+	mongoClient.connect('mongodb://' + env.host + ':' + env.port + '/'+ env.database, function(err, db) {
 		try {
 			if(err) {
 				throw 'MongoDB Service has not started';
