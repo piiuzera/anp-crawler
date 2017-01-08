@@ -21,6 +21,7 @@ var indexCity  = 0;
 var getValuesFirstRequest = function(callback) {
 	request({
 		'uri' : 'http://www.anp.gov.br/preco/prc/Resumo_Por_Estado_Index.asp',
+		'encoding': null,
 		'method' : 'GET',
 		'jar' : true
 	}).then(function(data) {
@@ -59,12 +60,14 @@ var getValuesFirstRequest = function(callback) {
 
 	}).catch(function(ex) {
 		console.error(ex);
+		throw ex;
 	});
 };
 
 var getPostRequestStoredCookie = function(state, fuel, callback) {
 	request({
 		'uri' : 'http://www.anp.gov.br/preco/prc/Resumo_Por_Estado_Index.asp',
+		'encoding': null,
 		'method': 'POST',
 		'jar' : true,
 		'form': {
@@ -81,12 +84,14 @@ var getPostRequestStoredCookie = function(state, fuel, callback) {
 		callback(state, fuel);
 	}).catch(function(ex) {
 		console.error(ex);
+		throw ex;
 	});
 };
 
 var getAllCitiesAndPrices = function(state, fuel, callback) {
 	request({
 		'uri' : 'http://www.anp.gov.br/preco/prc/Resumo_Por_Estado_Municipio.asp',
+		'encoding': null,
 		'method': 'GET',
 		'jar' : true
 	}).then(function(data) {
@@ -172,12 +177,14 @@ var getAllCitiesAndPrices = function(state, fuel, callback) {
 
 	}).catch(function(ex) {
 		console.error(ex);
+		throw ex;
 	});
 };
 
 var getStationsByCities = function(state, city, fuel, callback) {
 	request({
 		'uri': 'http://www.anp.gov.br/preco/prc/Resumo_Semanal_Posto.asp',
+		'encoding': null,
 		'method': 'POST',
 		'jar' : true,
 		'form': {
@@ -260,6 +267,7 @@ var getStationsByCities = function(state, city, fuel, callback) {
 		callback(state, city, fuel);
 	}).catch(function(ex) {
 		console.error(ex);
+		throw ex;
 	});
 };
 
@@ -321,6 +329,10 @@ function stations() {
 		jsonfile.spaces = 4;
 		jsonfile.writeFileSync('./data.json' , listState);
 
+		console.log('---');
+		console.log('JSON File Changed');
+		console.log('---');
+
 		saveMongoDb(function() {
 			console.log('---');
 			console.log('Finish');
@@ -339,7 +351,10 @@ function saveMongoDb(callback) {
 
 			var collection = db.collection('crawler');
 
-			collection.insertMany(listState);
+			collection.insertMany({
+				'date' : new Date().toJSON(),
+				'doc'  : listState
+			});
 
 			console.log('---');
 			console.log('Crawler saved in MongoDB');

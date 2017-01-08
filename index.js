@@ -1,6 +1,6 @@
 var express = require('express');
 var path = require('path');
-var fs = require('fs');
+var jsonfile = require('jsonfile');
 
 var app = express();
 app.set('views', './public');
@@ -15,9 +15,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/data', function(req, res) {
-	fs.readFile('./data.json', 'utf8', function(err, data) {
-		res.send(JSON.parse(data));
-	});
+	res.send(jsonfile.readFileSync('./data.json'));
 });
 
 app.get('/update', function(req, res) {
