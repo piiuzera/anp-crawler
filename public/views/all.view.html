@@ -1,0 +1,93 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-6 text-right">
+			<button class="btn btn-primary" ng-click="getData()">
+				<i class="glyphicon glyphicon-refresh"></i>
+			</button>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-6">
+			<h1 class="text-center">Consulta preço do combustível</h1>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Estado:</label>
+					<div class="col-sm-10">
+						<select class="form-control" ng-model="state" ng-options="state as (state.initial + ' - ' + state.name) for state in data">
+						</select>
+					</div>
+				</div>
+
+				<div class="form-group" ng-show="state">
+					<label class="col-sm-2 control-label">Cidade:</label>
+					<div class="col-sm-10">
+						<select class="form-control" ng-model="city" ng-options="city as city.name for city in state.cities">
+						</select>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+	<div class="row" ng-show="city">
+		<div class="col-md-4">
+			<div class="panel panel-default" ng-repeat="statistic in city.statistics">
+				<div class="panel-heading">
+					<h2>{{statistic.type}}</h2>
+				</div>
+				<div class="panel-body">
+					<h4>Preço Consumidor</h4>
+					<p>{{'Preço Médio: ' + statistic.consumerPrice.averagePrice}}</p>
+					<p>{{'Desvio Padrão: ' + statistic.consumerPrice.standardDeviation}}</p>
+					<p>{{'Preço Mínimo: ' + statistic.consumerPrice.minPrice}}</p>
+					<p>{{'Preço Máximo: ' + statistic.consumerPrice.maxPrice}}</p>
+					<p>{{'Margem Média: ' + statistic.consumerPrice.averageMargin}}</p>
+
+					<hr />
+
+					<h4>Preço Distribuidor</h4>
+					<p>{{'Preço Médio: ' + statistic.distributionPrice.averagePrice}}</p>
+					<p>{{'Desvio Padrão: ' + statistic.distributionPrice.standardDeviation}}</p>
+					<p>{{'Preço Mínimo: ' + statistic.distributionPrice.minPrice}}</p>
+					<p>{{'Preço Máximo: ' + statistic.distributionPrice.maxPrice}}</p>
+				</div>	
+			</div>
+		</div>
+		<div class="col-md-8">
+			<div class="panel panel-default" ng-repeat="station in city.stations">
+				<div class="panel-heading">
+					<h2>{{station.name}}</h2>
+				</div>
+				<div class="panel-body">
+					<p>{{'Endereço: ' + station.address}}</p>
+					<p>{{'Bairro: ' + station.area + ' - Bandeira: ' + station.flag}}</p>
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>Combustível</th>
+								<th>Preço Venda</th>
+								<th>Preço Compra</th>
+								<th>Modalidade de Compra</th>
+								<th>Fornecedor</th>
+								<th>Data Coleta</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="price in station.prices">
+								<td>{{price.type}}</td>
+								<td>{{price.sellPrice}}</td>
+								<td>{{price.buyPrice}}</td>
+								<td>{{price.saleMode}}</td>
+								<td>{{price.provider}}</td>
+								<td>{{price.date}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>	
+			</div>
+		</div>
+	</div>
+</div>

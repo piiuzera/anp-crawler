@@ -333,50 +333,27 @@ function stations() {
 		console.log('JSON File Changed');
 		console.log('---');
 
-		saveMongoDb(function() {
-			console.log('---');
-			console.log('Finish');
-			console.log('---');
-		});
+		console.log('---');
+		console.log('Finish');
+		console.log('---');
 	}
 }
 
-function saveMongoDb(callback) {
-	var env = jsonfile.readFileSync('./mongo.json');
-	mongoClient.connect('mongodb://' + env.host + ':' + env.port + '/'+ env.database, function(err, db) {
-		try {
-			if(err) {
-				throw 'MongoDB Service has not started';
-			}
+var init = function() {
+	getValuesFirstRequest(function() {
+		indexState = 0;
+		indexFuel = 0;
+		indexCity = 0;
 
-			var collection = db.collection('crawler');
+		console.log('---');
+		console.log('States and Cities');
+		console.log('---');
 
-			collection.insertMany({
-				'date' : new Date().toJSON(),
-				'doc'  : listState
-			});
-
-			console.log('---');
-			console.log('Crawler saved in MongoDB');
-			console.log('---');
-		} catch(ex) {
-			console.error(ex);
-		}
-		callback();
+		crawler();
 	});
-}
+};
 
-getValuesFirstRequest(function() {
-	indexState = 0;
-	indexFuel = 0;
-	indexCity = 0;
-
-	console.log('---');
-	console.log('States and Cities');
-	console.log('---');
-
-	crawler();
-});
+module.exports.Init = init;
 
 function getValueCity(attr) {
 	attr = attr.replace('javascript:Direciona(\'', '');

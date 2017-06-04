@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var jsonfile = require('jsonfile');
+var crawler = require('./crawler.js');
 
 var app = express();
 app.set('views', './public');
@@ -20,8 +21,8 @@ app.get('/data', function(req, res) {
 
 app.get('/update', function(req, res) {
 	try {
-		var crawler = require('./crawler.js');
-
+		crawler.Init();
+		
 		res.status(200).send({
 			'message': 'Processo de atualização foi inicializado. Verifique o console do servidor e aguarde uns 20 minutos para a atualização'
 		});
@@ -32,6 +33,6 @@ app.get('/update', function(req, res) {
 	}
 });
 
-app.listen(8000, function() {
-	console.log('Servidor funcionando no endereço: http://localhost:8000');
+app.listen(5005, function() {
+	console.log('Servidor funcionando no endereço: http://localhost:5005');
 });

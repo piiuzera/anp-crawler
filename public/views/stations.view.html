@@ -1,0 +1,49 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-6 text-right">
+			<button class="btn btn-primary" ng-click="getData()">
+				<i class="glyphicon glyphicon-refresh"></i>
+			</button>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-3"></div>
+		<div class="col-md-6">
+			<h1 class="text-center">Consulta postos de combustíveis</h1>
+			<form class="form-horizontal">
+				<div class="form-group">
+					<label class="col-sm-2 control-label">Estado:</label>
+					<div class="col-sm-10">
+						<select class="form-control" ng-model="state" ng-options="state as (state.initial + ' - ' + state.name) for state in data">
+						</select>
+					</div>
+				</div>
+			</form>
+		</div>
+		<div class="col-md-3"></div>
+	</div>
+	<div class="row" ng-show="state">
+		<div class="col-md-12">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Cidade</th>
+						<th>Razão Social</th>
+						<th>Endereço</th>
+						<th>Bairro</th>
+					</tr>
+				</thead>
+				<tbody ng-repeat="city in state.cities">
+					<tr ng-repeat="station in city.stations">
+						<td>{{city.name}}</td>
+						<td>{{station.name}}</td>
+						<td>{{station.address}}</td>
+						<td>{{station.area}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
